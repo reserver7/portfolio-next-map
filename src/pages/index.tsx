@@ -1,12 +1,10 @@
 import { useState } from "react";
 
-import Map from "../components/Map";
-import Markers from "../components/Markers";
+import Map from "@/components/Map";
+import Markers from "@/components/Markers";
 
-import * as stores from "../data/store_data.json";
-import StoreBox from "../components/StoreBox";
-import React from "react";
-import { StoreType } from "../interface/index";
+import StoreBox from "@/components/StoreBox";
+import { StoreType } from "@/interface";
 
 export default function Home({ stores }: { stores: StoreType[] }) {
   const [map, setMap] = useState(null);
