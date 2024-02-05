@@ -11,7 +11,7 @@ import React from "react";
 import { StoreType } from "@/interface";
 
 interface StoreBoxProps {
-  store: StoreType;
+  store: StoreType | null;
   setStore: Dispatch<SetStateAction<any>>;
 }
 
