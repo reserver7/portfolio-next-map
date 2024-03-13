@@ -8,13 +8,14 @@ interface Responsetype {
   limit?: string;
   q?: string;
   district?: string;
+  id?: string;
 }
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<StoreApiResponse | StoreType[] | StoreType | null>
 ) {
-  const { page = "", limit = "", q, district }: Responsetype = req.query;
+  const { page = "", limit = "", q, district, id }: Responsetype = req.query;
   if (req.method === "POST") {
     // 데이터 생성을 처리한다
     const formData = req.body;
@@ -54,6 +55,19 @@ export default async function handler(
     });
 
     return res.status(200).json(result);
+  } else if (req.method === "DELETE") {
+    // 데이터 삭제 처리
+    if (id) {
+      const result = await prisma.store.delete({
+        where: {
+          id: parseInt(id),
+        },
+      });
+
+      return res.status(200).json(result);
+    } else {
+      return res.status(500).json(null);
+    }
   } else {
     // GET 요청 처리
     if (page) {

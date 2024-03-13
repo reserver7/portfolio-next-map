@@ -1,7 +1,7 @@
 import { CATEGORY_ARR, FOOD_CERTIFY_ARR, STORE_TYPE_ARR } from "@/data/store";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { useRouter } from "next/router";
 import AddressSearch from "@/components/AddressSearch";
 import { StoreType } from "@/interface";
@@ -62,17 +62,17 @@ export default function StoreEditPage() {
       onSubmit={handleSubmit(async (data) => {
         try {
           const result = await axios.put("/api/stores", data);
-
           if (result.status === 200) {
-            // 성공
+            // 성공 케이스
             toast.success("맛집을 수정했습니다.");
             router.replace(`/stores/${result?.data?.id}`);
           } else {
-            // 실패
-            toast.error("다시 시도해주세요.");
+            // 실패 케이스
+            toast.error("다시 시도해주세요");
           }
         } catch (e) {
-          toast.error("데이터 생성중 문제가 생겼습니다. 다시 시도해주세요.");
+          console.log(e);
+          toast.error("데이터 수정중 문제가 생겼습니다. 다시 시도해주세요.");
         }
       })}
     >
@@ -153,15 +153,11 @@ export default function StoreEditPage() {
                 )}
               </div>
             </div>
-
-            <div className="col-span-full">
-              <AddressSearch
-                setValue={setValue}
-                register={register}
-                errors={errors}
-              />
-            </div>
-
+            <AddressSearch
+              setValue={setValue}
+              register={register}
+              errors={errors}
+            />
             <div className="sm:col-span-2 sm:col-start-1">
               <label
                 htmlFor="city"
@@ -201,7 +197,7 @@ export default function StoreEditPage() {
                   {...register("storeType", { required: true })}
                   className="block w-full rounded-md border-0 py-2 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 >
-                  <option value="">업종구분</option>
+                  <option value="">업종구분 선택</option>
                   {STORE_TYPE_ARR?.map((data) => (
                     <option key={data} value={data}>
                       {data}
@@ -222,6 +218,7 @@ export default function StoreEditPage() {
       <div className="mt-6 flex items-center justify-end gap-x-6">
         <button
           type="button"
+          onClick={() => router.back()}
           className="text-sm font-semibold leading-6 text-gray-900"
         >
           뒤로가기
