@@ -1,14 +1,15 @@
 import { useRouter } from "next/router";
-import React from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { StoreType } from "@/interface";
 import Loader from "@/components/Loader";
 import Map from "@/components/Map";
 import Marker from "@/components/Marker";
+import { toast } from "react-toastify";
+
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { toast } from "react-toastify";
+import Like from "@/components/Like";
 
 export default function StorePage() {
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function StorePage() {
     isFetching,
     isSuccess,
     isError,
-  } = useQuery(`store-${id}`, fetchStore, {
+  } = useQuery<StoreType>(`store-${id}`, fetchStore, {
     enabled: !!id,
     refetchOnWindowFocus: false,
   });
@@ -35,7 +36,7 @@ export default function StorePage() {
 
     if (confirm && store) {
       try {
-        const result = await axios.delete(`/api/stores?id=${store.id}`);
+        const result = await axios.delete(`/api/stores?id=${store?.id}`);
 
         if (result.status === 200) {
           toast.success("가게를 삭제했습니다.");
@@ -74,8 +75,9 @@ export default function StorePage() {
               {store?.address}
             </p>
           </div>
-          {status === "authenticated" && (
+          {status === "authenticated" && store && (
             <div className="flex items-center gap-4 px-4 py-3">
+              {<Like storeId={store.id} />}
               <Link
                 className="underline hover:text-gray-400 text-sm"
                 href={`/stores/${store?.id}/edit`}

@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "@/db";
 
@@ -7,7 +7,7 @@ import NaverProvider from "next-auth/providers/naver";
 import KakaoProvider from "next-auth/providers/kakao";
 import { Adapter } from "next-auth/adapters";
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt" as const,
     maxAge: 60 * 60 * 24,
@@ -28,11 +28,25 @@ export const authOptions = {
     KakaoProvider({
       clientId: process.env.KAKAO_CLIENT_ID || "",
       clientSecret: process.env.KAKAO_CLIENT_SECRET || "",
-      allowDangerousEmailAccountLinking: true,
     }),
   ],
   pages: {
     signIn: "/users/login",
+  },
+  callbacks: {
+    session: ({ session, token }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        id: token.sub,
+      },
+    }),
+    jwt: async ({ user, token }) => {
+      if (user) {
+        token.sub = user.id;
+      }
+      return token;
+    },
   },
 };
 
