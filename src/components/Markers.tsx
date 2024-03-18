@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { useEffect, useCallback } from "react";
 import { StoreType } from "@/interface";

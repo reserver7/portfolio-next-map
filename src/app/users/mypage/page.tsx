@@ -1,14 +1,19 @@
+"use client";
+
+/* eslint-disable @next/next/no-img-element */
 import Pagination from "@/components/Pagination";
 import CommentList from "@/components/comments/CommentList";
 import { CommentApiResponse } from "@/interface";
 import axios from "axios";
-import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useSession, signOut } from "next-auth/react";
 import { useQuery } from "react-query";
 
-export default function Mypage() {
-  const router = useRouter();
-  const { page = "1" }: any = router.query;
+export default function Mypage({
+  searchParams,
+}: {
+  searchParams: { page: string };
+}) {
+  const page = searchParams?.page || "1";
 
   const fetchComments = async () => {
     const { data } = await axios(
@@ -22,8 +27,8 @@ export default function Mypage() {
     `comments-${page}`,
     fetchComments
   );
-  const { data: session } = useSession();
 
+  const { data: session } = useSession();
   return (
     <div className="md:max-w-5xl mx-auto px-4 py-8">
       <div className="px-4 sm:px-0">
@@ -61,7 +66,7 @@ export default function Mypage() {
                 alt="프로필 이미지"
                 width={48}
                 height={48}
-                className="rounded-full"
+                className="rounded-full w-12 h-12"
                 src={session?.user.image || "/images/markers/default.png"}
               />
             </dd>
@@ -91,7 +96,6 @@ export default function Mypage() {
         </p>
       </div>
       <CommentList comments={comments} displayStore={true} />
-
       <Pagination
         total={comments?.totalPage}
         page={page}
