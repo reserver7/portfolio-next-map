@@ -1,13 +1,12 @@
 "use client";
 
-import React from "react";
-import { useEffect, useCallback } from "react";
-import { StoreType } from "@/interface";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { currentStoreState, locationState, mapState } from "@/atom";
+import { StoreType } from "@/interface";
+import { useEffect, useCallback } from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 interface MarkerProps {
-  stores: StoreType[];
+  stores?: StoreType[];
 }
 
 export default function Markers({ stores }: MarkerProps) {
@@ -81,6 +80,7 @@ export default function Markers({ stores }: MarkerProps) {
         });
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, stores]);
 
   useEffect(() => {

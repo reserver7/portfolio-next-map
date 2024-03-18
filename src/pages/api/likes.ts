@@ -1,8 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+// import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/db";
 import { LikeInterface, LikeApiResponse } from "@/interface";
+import { authOptions } from "@/utils/authOptions";
 interface ResponseType {
   page?: string;
   limit?: string;
