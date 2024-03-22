@@ -33,6 +33,7 @@ export default function Comments({ storeId, page = "1" }: CommentProps) {
       {status === "authenticated" && (
         <CommentForm storeId={storeId} refetch={refetch} />
       )}
+
       <CommentList comments={comments} />
       <Pagination
         total={comments?.totalPage}
